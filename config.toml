@@ -39,7 +39,7 @@ toc = true
 autoCollapseToc = true
 
 # enable prefers-color-scheme:dark, default false
-darkMedia = true
+darkMedia = false
 
 # enable hero section's is-bold effect, default false
 heroBold = false
