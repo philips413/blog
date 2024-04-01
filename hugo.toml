@@ -1,0 +1,53 @@
+baseURL = "https://philips413.github.io"
+title = "PHILIPS'413의 기억을 저장하는 곳"
+description = "Philips의 기억하고 싶은 여러가지 것들을 작성해놓은 블로그 입니다."
+author = "Philips413"
+copyright = "Philips413"
+paginate = 10
+languageCode = "en"
+theme = "tailwind"
+
+[params]
+# dir name of your blog content (default is `content/posts`).
+# the list of set content will show up on your index page (baseurl).
+contentTypeName = "post"
+
+[params.header]
+logo = "logo.svg"
+
+[params.footer]
+since = 2024
+poweredby = true
+
+[menu]
+
+[[menu.main]]
+identifier = "post"
+name = "모든 글보기"
+pageRef = "/post"
+weight = 0
+
+[[menu.main]]
+identifier = "about"
+name = "소개"
+pageRef = "/about"
+weight = 10
+
+[[menu.main]]
+identifier = "archieve"
+name = "독서"
+pageRef = "/categories/독서/"
+weight = 20
+
+[taxonomies]
+category = "categories"
+tag = "tags"
+series = "series"
+
+[social_media]
+
+[[social_media.items]]
+enabled = true
+title = 'Facebook'
+icon = 'brand-facebook'
+link = 'https://www.facebook.com/'
