@@ -3,13 +3,15 @@
 사용법: python scripts/check_site.py <빌드 폴더> [content 폴더]
 - 내부 링크(href/src)가 모두 실제 파일을 가리키는지
 - 원본 글마다 결과 페이지가 있는지
+- hugo.toml의 cascade로 숨긴(render = "never") 글은 결과에 없는지
 - 검색 인덱스(index.json)가 올바르고 글 수가 맞는지
 - 주요 화면(홈, 2페이지, 글 목록, 분류, 404)이 있는지
 문제가 하나라도 있으면 종료 코드 1을 돌려준다.
 """
+import fnmatch
 import json
-import re
 import sys
+import tomllib
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -38,10 +40,16 @@ def target(root: Path, page: Path, url: str):
     return t / "index.html" if path.endswith("/") or t.is_dir() else t
 
 
-def front_matter(md: Path):
-    text = md.read_text(encoding="utf-8")
-    m = re.match(r"---\n(.*?)\n---", text, re.S)
-    return m.group(1) if m else ""
+def hidden_patterns(config: Path):
+    """hugo.toml에서 render = "never"로 숨긴 cascade 대상 경로(glob)를 돌려준다."""
+    if not config.exists():
+        return []
+    cfg = tomllib.loads(config.read_text(encoding="utf-8"))
+    cascades = cfg.get("cascade", [])
+    if isinstance(cascades, dict):
+        cascades = [cascades]
+    return [c["target"]["path"].lstrip("/") for c in cascades
+            if c.get("build", {}).get("render") == "never" and "path" in c.get("target", {})]
 
 
 def main(out: Path, content: Path):
@@ -55,10 +63,17 @@ def main(out: Path, content: Path):
             if t is not None and not t.exists():
                 errors.append(f"깨진 링크: {page.relative_to(out)} -> {url}")
 
-    posts = sorted((content / "post").rglob("*.md"))
-    for md in posts:
+    hidden = hidden_patterns(content.parent / "hugo.toml")
+    posts = []
+    for md in sorted((content / "post").rglob("*.md")):
         rel = md.relative_to(content).with_suffix("")
-        if not (out / rel / "index.html").exists():
+        page = out / rel / "index.html"
+        if any(fnmatch.fnmatch(rel.as_posix(), pat) for pat in hidden):
+            if page.exists():
+                errors.append(f"숨긴 글이 결과에 남아 있음: {rel}")
+            continue
+        posts.append(md)
+        if not page.exists():
             errors.append(f"글 페이지 없음: {rel}")
 
     idx = out / "index.json"
@@ -77,7 +92,7 @@ def main(out: Path, content: Path):
         if not (out / need).exists():
             errors.append(f"필수 페이지 없음: {need}")
 
-    print(f"HTML {len(pages)}개, 원본 글 {len(posts)}개 점검")
+    print(f"HTML {len(pages)}개, 공개 글 {len(posts)}개 점검 (숨김 규칙: {', '.join(hidden) or '없음'})")
     for e in errors:
         print(" -", e)
     print("통과" if not errors else f"실패 {len(errors)}건")

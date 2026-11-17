@@ -42,6 +42,14 @@ name = "독서"
 pageRef = "/categories/독서/"
 weight = 20
 
+# 기독교(교회 회의록) 글은 사이트에서 제외한다. 원본 파일은 보관
+[[cascade]]
+[cascade.build]
+list = "never"
+render = "never"
+[cascade.target]
+path = "/post/church/**"
+
 [taxonomies]
 category = "categories"
 tag = "tags"
