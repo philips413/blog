@@ -10,6 +10,7 @@
   --sel:#3a3b40; --selfg:#ecebe6;
   --term:#1e1f20; --tg:#c9c6b8; --accent:#c9a86a; --folder:#bdb59f;
   --shadow:4px 4px 0 0 rgba(0,0,0,.18);
+  --veil:rgba(28,28,31,.62); /* 바탕화면 위 글자 뒤에 까는 반투명 띠 */
   --px:"Galmuri11", ui-monospace, "Malgun Gothic", sans-serif;
   --mono:"GalmuriMono11", "Galmuri11", ui-monospace, monospace;
   --sans:"Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
@@ -19,6 +20,21 @@
 html{-webkit-text-size-adjust:100%}
 /* 긴 글은 일반 글꼴(부드럽게), 픽셀 글꼴은 UI 요소에만(선명하게) */
 body{margin:0;min-height:100vh;display:flex;flex-direction:column;font-family:var(--sans);font-size:15px;line-height:1.6;color:var(--ink);background:var(--desk)}
+/* 바탕화면: 도트 풍경(scripts/make_wallpaper.py로 생성). 화면에 고정하고 픽셀을 뭉개지 않게 확대 */
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:var(--desk) url("/img/wallpaper.png") center bottom/cover no-repeat;image-rendering:pixelated}
+
+/* 구름: 바탕화면과 같은 배율(cover, 아래 가운데 정렬)로 겹친 두 겹이 천천히 흘러가며 도트 1칸씩 오르내린다 */
+.sky{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;
+  --wc:max(100vw, 177.78vh);      /* cover로 늘린 그림의 너비 */
+  --hc:max(56.25vw, 100vh);       /* 높이 */
+  --apx:calc(var(--wc) / 320)}    /* 도트 1칸 크기 */
+.clouds{position:absolute;left:calc((100vw - var(--wc)) / 2);top:calc(100vh - var(--hc));
+  width:calc(var(--wc) * 2);height:var(--hc);image-rendering:pixelated;
+  background-repeat:repeat-x;background-size:var(--wc) var(--hc);will-change:transform}
+.clouds.far{background-image:url("/img/clouds-far.png");animation:drift 420s linear infinite,bob 9s steps(1) infinite}
+.clouds.near{background-image:url("/img/clouds-near.png");animation:drift 240s linear infinite,bob 6s steps(1) infinite -2s}
+@keyframes drift{from{transform:translateX(calc(var(--wc) * -1))}to{transform:translateX(0)}}
+@keyframes bob{50%{translate:0 calc(var(--apx) * -1)}}
 .menubar,.titlebar,.toolbar,.status,.files th,.files .name,.files .date,.files .cat,.ico,.doc-head h1,.meta,
 .prose h1,.prose h2,.prose h3,.prose h4,.tagcloud,.list,.nav,.pager,.term,.results b,.foot{
   font-family:var(--px);-webkit-font-smoothing:none;font-smooth:never}
@@ -55,6 +71,7 @@ a{color:inherit}
 .icons{display:flex;flex-direction:column;gap:18px;align-items:center}
 .ico{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;color:var(--winhi);text-shadow:1px 1px 0 var(--ink);text-decoration:none;text-align:center;word-break:keep-all}
 .ico .lbl{padding:0 4px}
+.icons .lbl{background:var(--veil)}
 .ico:hover .lbl,.ico.cur .lbl{background:var(--sel)}
 .folder{width:44px;height:34px;position:relative;background:var(--folder);border:2px solid var(--line);margin-top:9px}
 .folder::before{content:"";position:absolute;left:-2px;top:-9px;width:20px;height:9px;background:var(--folder);border:2px solid var(--line);border-bottom:0}
@@ -165,7 +182,7 @@ a{color:inherit}
 .nav small{display:block;font-size:12px;opacity:.7}
 .nav .next{text-align:right;grid-column:2}
 
-.foot{text-align:center;font-size:12px;color:var(--winhi);text-shadow:1px 1px 0 var(--ink);padding-block:0 24px}
+.foot{text-align:center;font-size:12px;color:var(--winhi);text-shadow:1px 1px 0 var(--ink);padding-block:8px;background:var(--veil)}
 .foot a{color:inherit}
 
 /* ---------- 반응형 ---------- */
