@@ -48,7 +48,8 @@ a{color:inherit}
 /* ---------- 메뉴바 ---------- */
 .menubar{position:sticky;top:0;z-index:20;background:var(--winhi);border-bottom:2px solid var(--line);
   display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;padding-block:6px;font-size:14px}
-.menubar .brand{font-weight:700;text-decoration:none;white-space:nowrap}
+.menubar .brand{font-weight:700;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+.menubar .brand img{width:16px;height:16px;image-rendering:pixelated;flex:none}
 .menubar nav{display:flex;flex-wrap:wrap;gap:2px 6px}
 .menubar nav a{padding:2px 8px;text-decoration:none}
 .menubar nav a:hover,.menubar nav a.cur{background:var(--sel);color:var(--selfg)}

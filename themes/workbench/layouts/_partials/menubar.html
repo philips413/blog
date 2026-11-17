@@ -1,6 +1,6 @@
 {{ $cur := . -}}
 <header class="menubar wrap">
-  <a class="brand" href="{{ "/" | relURL }}">▣ {{ site.Params.brand | default site.Title }}</a>
+  <a class="brand" href="{{ "/" | relURL }}"><img src="{{ "favicon.svg" | relURL }}" width="16" height="16" alt="">{{ site.Params.brand | default site.Title }}</a>
   <nav aria-label="주 메뉴">
     {{- range site.Menus.main }}
     <a href="{{ .URL }}"{{ if or ($cur.IsMenuCurrent "main" .) ($cur.HasMenuCurrent "main" .) }} class="cur" aria-current="page"{{ end }}>{{ .Name }}</a>

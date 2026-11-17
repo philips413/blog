@@ -5,7 +5,9 @@
 <link rel="canonical" href="{{ .Permalink }}">
 {{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .RelPermalink }}" title="{{ site.Title }}">{{ end }}
 {{ partial "opengraph.html" . }}
-<link rel="icon" href="{{ "favicon.ico" | relURL }}">
+<link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="32x32">
+<link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
 <link rel="preload" href="{{ "fonts/Galmuri11.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 {{ $css := resources.Get "css/workbench.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
