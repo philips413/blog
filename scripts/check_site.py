@@ -1,6 +1,7 @@
 """빌드 결과(public 등)를 점검한다.
 
-사용법: python scripts/check_site.py <빌드 폴더> [content 폴더]
+사용법: python scripts/check_site.py <빌드 폴더> [content 폴더] [--ignore 폴더1,폴더2]
+  --ignore  Hugo가 만들지 않은 폴더(예: manito,address)는 링크 점검에서 뺀다
 - 내부 링크(href/src)가 모두 실제 파일을 가리키는지
 - 원본 글마다 결과 페이지가 있는지
 - hugo.toml의 cascade로 숨긴(render = "never") 글은 결과에 없는지
@@ -8,6 +9,7 @@
 - 주요 화면(홈, 2페이지, 글 목록, 분류, 404)이 있는지
 문제가 하나라도 있으면 종료 코드 1을 돌려준다.
 """
+import argparse
 import fnmatch
 import json
 import sys
@@ -52,9 +54,9 @@ def hidden_patterns(config: Path):
             if c.get("build", {}).get("render") == "never" and "path" in c.get("target", {})]
 
 
-def main(out: Path, content: Path):
+def main(out: Path, content: Path, ignore=()):
     errors = []
-    pages = list(out.rglob("*.html"))
+    pages = [p for p in out.rglob("*.html") if p.relative_to(out).parts[0] not in ignore]
     for page in pages:
         p = Links()
         p.feed(page.read_text(encoding="utf-8"))
@@ -92,7 +94,8 @@ def main(out: Path, content: Path):
         if not (out / need).exists():
             errors.append(f"필수 페이지 없음: {need}")
 
-    print(f"HTML {len(pages)}개, 공개 글 {len(posts)}개 점검 (숨김 규칙: {', '.join(hidden) or '없음'})")
+    print(f"HTML {len(pages)}개, 공개 글 {len(posts)}개 점검 (숨김 규칙: {', '.join(hidden) or '없음'}"
+          f"{', 제외 폴더: ' + ', '.join(ignore) if ignore else ''})")
     for e in errors:
         print(" -", e)
     print("통과" if not errors else f"실패 {len(errors)}건")
@@ -100,6 +103,9 @@ def main(out: Path, content: Path):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        sys.exit(__doc__)
-    sys.exit(main(Path(sys.argv[1]).resolve(), Path(sys.argv[2] if len(sys.argv) > 2 else "content").resolve()))
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("out")
+    ap.add_argument("content", nargs="?", default="content")
+    ap.add_argument("--ignore", default="")
+    a = ap.parse_args()
+    sys.exit(main(Path(a.out).resolve(), Path(a.content).resolve(), tuple(x for x in a.ignore.split(",") if x)))

@@ -16,6 +16,24 @@
   var nf = document.getElementById("nf-path");
   if (nf) nf.textContent = decodeURIComponent(location.pathname);
 
+  // 목록 대표 이미지(주로 외부 주소)를 못 불러오면 문서 아이콘으로 바꾼다
+  function thumbFallback(img) {
+    var name = img.closest(".item") && img.closest(".item").querySelector(".name");
+    if (name && !name.querySelector(".doc")) {
+      var doc = document.createElement("span");
+      doc.className = "doc";
+      doc.setAttribute("aria-hidden", "true");
+      name.insertBefore(doc, name.firstChild);
+    }
+    img.remove();
+  }
+  document.addEventListener("error", function (e) {
+    if (e.target && e.target.matches && e.target.matches("img.thumb")) thumbFallback(e.target);
+  }, true);
+  Array.prototype.forEach.call(document.querySelectorAll("img.thumb"), function (img) {
+    if (img.complete && img.naturalWidth === 0 && img.currentSrc) thumbFallback(img);
+  });
+
   // 도트 애니메이션은 "애니메이션 줄이기" 설정이면 모두 끈다
   var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
   function rand(a, b) { return a + Math.random() * (b - a); }

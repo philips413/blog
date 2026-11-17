@@ -116,6 +116,10 @@ a{color:inherit}
 .doc{display:inline-block;width:14px;height:16px;border:2px solid currentColor;margin-right:8px;vertical-align:-2px;
   background:linear-gradient(currentColor,currentColor) 2px 4px/7px 2px no-repeat,linear-gradient(currentColor,currentColor) 2px 8px/7px 2px no-repeat}
 .files .ex{display:block;font-size:13px;opacity:.75;margin-top:2px}
+/* 대표 이미지가 있는 글: 문서 아이콘 대신 왼쪽에 작은 미리보기 */
+.files .item{display:flex;gap:10px;align-items:flex-start}
+.files .txt{min-width:0}
+.thumb{flex:none;width:72px;height:54px;object-fit:cover;border:2px solid currentColor;background:var(--winhi)}
 .files .date{font-family:var(--mono);white-space:nowrap;font-variant-numeric:tabular-nums}
 .files .cat{white-space:nowrap}
 
@@ -195,6 +199,7 @@ a{color:inherit}
 }
 @media (max-width:600px){
   .files .hide-s{display:none}
+  .thumb{width:56px;height:42px}
   .menubar .clock{display:none}
   .search{flex:1 1 100%}
   .search input{width:100%}

@@ -8,8 +8,10 @@
       <tbody>
         {{- range .pager.Pages }}
         <tr>
-          <td><a class="name" href="{{ .RelPermalink }}"><span class="doc" aria-hidden="true"></span>{{ .Title }}</a>
-            <span class="ex">{{ .Summary | plainify | strings.TrimSpace | truncate 70 }}</span></td>
+          {{- $thumb := partial "cover.html" . | strings.TrimSpace }}
+          <td><div class="item">{{ with $thumb }}{{ . | safeHTML }}{{ end }}<div class="txt">
+            <a class="name" href="{{ .RelPermalink }}">{{ if not $thumb }}<span class="doc" aria-hidden="true"></span>{{ end }}{{ .Title }}</a>
+            <span class="ex">{{ .Summary | plainify | strings.TrimSpace | truncate 70 }}</span></div></div></td>
           <td class="hide-s cat">{{ with .Params.categories }}{{ delimit . ", " }}{{ else }}-{{ end }}</td>
           <td class="date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time></td>
         </tr>
