@@ -38,12 +38,6 @@ name = "독서"
 pageRef = "/categories/독서/"
 weight = 20
 
-[[menu.main]]
-identifier = "linkee"
-name = "링키(앱)"
-pageRef = "/categories/링키/"
-weight = 30
-
 [taxonomies]
 category = "categories"
 tag = "tags"
