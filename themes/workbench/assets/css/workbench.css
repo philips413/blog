@@ -4,31 +4,33 @@
 @font-face{font-family:"GalmuriMono11";src:url("/fonts/GalmuriMono11.woff2") format("woff2");font-display:swap}
 
 :root{
-  --desk:#6e7076; --dither:#66686e;
-  --win:#d3d1ca; --winhi:#ecebe6; --winlo:#8a8880;
-  --ink:#1c1c1f; --sel:#3a3b40; --selfg:#ecebe6;
-  --term:#18191a; --tg:#c9c6b8; --accent:#c9a86a; --folder:#bdb59f;
+  --desk:#5e6066;
+  --win:#d3d1ca; --winhi:#e8e6df; --winlo:#a3a19a;
+  --ink:#1c1c1f; --line:#4a4a50; --text:#2e2e33;
+  --sel:#3a3b40; --selfg:#ecebe6;
+  --term:#1e1f20; --tg:#c9c6b8; --accent:#c9a86a; --folder:#bdb59f;
+  --shadow:4px 4px 0 0 rgba(0,0,0,.18);
   --px:"Galmuri11", ui-monospace, "Malgun Gothic", sans-serif;
   --mono:"GalmuriMono11", "Galmuri11", ui-monospace, monospace;
+  --sans:"Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif;
   color-scheme:light;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{margin:0;min-height:100vh;display:flex;flex-direction:column;font-family:var(--px);font-size:15px;line-height:1.6;color:var(--ink);
-  -webkit-font-smoothing:none;font-smooth:never;
-  background-color:var(--desk);
-  background-image:linear-gradient(45deg,var(--dither) 25%,transparent 25%,transparent 75%,var(--dither) 75%),
-                   linear-gradient(45deg,var(--dither) 25%,transparent 25%,transparent 75%,var(--dither) 75%);
-  background-size:4px 4px;background-position:0 0,2px 2px}
+/* 긴 글은 일반 글꼴(부드럽게), 픽셀 글꼴은 UI 요소에만(선명하게) */
+body{margin:0;min-height:100vh;display:flex;flex-direction:column;font-family:var(--sans);font-size:15px;line-height:1.6;color:var(--ink);background:var(--desk)}
+.menubar,.titlebar,.toolbar,.status,.files th,.files .name,.files .date,.files .cat,.ico,.doc-head h1,.meta,
+.prose h1,.prose h2,.prose h3,.prose h4,.tagcloud,.list,.nav,.pager,.term,.results b,.foot{
+  font-family:var(--px);-webkit-font-smoothing:none;font-smooth:never}
+.term,.files .date,.pager{font-family:var(--mono)}
 a{color:inherit}
 :focus-visible{outline:3px dashed var(--accent);outline-offset:2px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wrap{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
-@keyframes blink{50%{opacity:0}}
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 /* ---------- 메뉴바 ---------- */
-.menubar{position:sticky;top:0;z-index:20;background:var(--winhi);border-bottom:3px solid var(--ink);
+.menubar{position:sticky;top:0;z-index:20;background:var(--winhi);border-bottom:2px solid var(--line);
   display:flex;flex-wrap:wrap;align-items:center;gap:4px 18px;padding-block:6px;font-size:14px}
 .menubar .brand{font-weight:700;text-decoration:none;white-space:nowrap}
 .menubar nav{display:flex;flex-wrap:wrap;gap:2px 6px}
@@ -36,9 +38,9 @@ a{color:inherit}
 .menubar nav a:hover,.menubar nav a.cur{background:var(--sel);color:var(--selfg)}
 .menubar .clock{margin-left:auto;font-family:var(--mono);font-variant-numeric:tabular-nums}
 .search{position:relative}
-.search input{font:inherit;font-size:13px;width:180px;padding:2px 8px;border:2px solid var(--ink);background:#fff;color:var(--ink);border-radius:0}
+.search input{font:inherit;font-size:13px;width:180px;padding:2px 8px;border:2px solid var(--line);background:#fff;color:var(--ink);border-radius:0}
 .results{position:absolute;right:0;top:calc(100% + 8px);width:min(420px,calc(100vw - 32px));max-height:70vh;overflow:auto;
-  background:var(--win);border:3px solid var(--ink);box-shadow:6px 6px 0 0 rgba(0,0,0,.35);z-index:30}
+  background:var(--win);border:2px solid var(--line);box-shadow:var(--shadow);z-index:30}
 .results a{display:block;padding:8px 10px;text-decoration:none;border-bottom:1px dotted var(--winlo)}
 .results a:hover,.results a:focus-visible{background:var(--sel);color:var(--selfg);outline:none}
 .results b{display:block;font-size:14px}
@@ -54,18 +56,18 @@ a{color:inherit}
 .ico{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:13px;color:var(--winhi);text-shadow:1px 1px 0 var(--ink);text-decoration:none;text-align:center;word-break:keep-all}
 .ico .lbl{padding:0 4px}
 .ico:hover .lbl,.ico.cur .lbl{background:var(--sel)}
-.folder{width:44px;height:34px;position:relative;background:var(--folder);border:3px solid var(--ink);margin-top:9px}
-.folder::before{content:"";position:absolute;left:-3px;top:-9px;width:20px;height:9px;background:var(--folder);border:3px solid var(--ink);border-bottom:0}
+.folder{width:44px;height:34px;position:relative;background:var(--folder);border:2px solid var(--line);margin-top:9px}
+.folder::before{content:"";position:absolute;left:-2px;top:-9px;width:20px;height:9px;background:var(--folder);border:2px solid var(--line);border-bottom:0}
 .folder .n{position:absolute;right:3px;bottom:0;font-size:11px;color:var(--ink);text-shadow:none;font-family:var(--mono)}
 .ico.cur .folder,.ico.cur .folder::before{background:var(--accent)}
 
 /* ---------- 창 ---------- */
-.window{background:var(--win);border:3px solid var(--ink);box-shadow:6px 6px 0 0 rgba(0,0,0,.35);min-width:0}
-.titlebar{display:flex;align-items:center;gap:10px;padding:4px 8px;border-bottom:3px solid var(--ink);
-  background:repeating-linear-gradient(180deg,var(--win) 0 2px,var(--ink) 2px 3px)}
+.window{background:var(--win);border:2px solid var(--line);box-shadow:var(--shadow);min-width:0}
+.titlebar{display:flex;align-items:center;gap:10px;padding:4px 8px;border-bottom:2px solid var(--line);
+  background:repeating-linear-gradient(180deg,var(--win) 0 4px,var(--winlo) 4px 6px)}
 .titlebar .t{background:var(--win);padding:0 8px;margin:0 auto;font-size:14px;font-weight:700;line-height:1.5;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:calc(100% - 60px)}
-.titlebar .box{width:16px;height:16px;border:3px solid var(--ink);background:var(--win);flex:none}
+.titlebar .box{width:16px;height:16px;border:2px solid var(--line);background:var(--win);flex:none}
 .toolbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 8px;padding:6px 10px;font-size:13px;border-bottom:2px solid var(--winlo);background:var(--winhi)}
 .status{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 8px;padding:6px 10px;font-size:12px;border-top:2px solid var(--winlo);background:var(--winhi)}
 
@@ -94,11 +96,11 @@ a{color:inherit}
 .term{margin:0;background:var(--term);color:var(--tg);font-family:var(--mono);font-size:13px;padding:12px;line-height:1.7;white-space:pre-wrap;word-break:break-all}
 .term .p{color:var(--accent)}
 .term a{color:var(--tg)}
-.term .c{display:inline-block;width:8px;height:14px;background:var(--tg);vertical-align:-2px;animation:blink 1s steps(1) infinite}
+.term .c{display:inline-block;width:8px;height:14px;background:var(--tg);vertical-align:-2px}
 
 /* 태그·시리즈 */
 .tagcloud{display:flex;flex-wrap:wrap;gap:6px;padding:10px;font-size:13px}
-.tagcloud a{border:2px solid var(--ink);padding:0 6px;background:var(--winhi);text-decoration:none}
+.tagcloud a{border:2px solid var(--line);padding:0 6px;background:var(--winhi);text-decoration:none}
 .tagcloud a small{margin-left:4px;opacity:.6;font-family:var(--mono)}
 .tagcloud a:hover,.tagcloud a.cur{background:var(--sel);color:var(--selfg)}
 .list{list-style:none;margin:0;padding:8px 0;font-size:14px}
@@ -113,11 +115,11 @@ a{color:inherit}
 .folders .ico:hover .lbl{color:var(--selfg)}
 
 /* ---------- 글 본문 ---------- */
-.doc-head{padding:20px 24px 14px;background:var(--winhi);border-bottom:2px solid var(--winlo)}
+.doc-head{padding:20px 24px 14px;background:var(--winhi);border-bottom:2px solid var(--winlo);color:var(--ink)}
 .doc-head h1{margin:0 0 10px;font-size:24px;line-height:1.4;font-weight:700;text-wrap:balance}
 .meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:13px}
 .meta a{text-decoration:none;border-bottom:1px dotted currentColor}
-.prose{padding:20px 24px 28px;background:var(--winhi);font-size:16px;line-height:1.85;overflow-wrap:anywhere}
+.prose{padding:22px 24px 30px;background:var(--winhi);color:var(--text);font-size:16.5px;line-height:1.8;letter-spacing:-.005em;overflow-wrap:anywhere;word-break:keep-all}
 .prose>*{max-width:68ch}
 .prose h1,.prose h2,.prose h3,.prose h4{line-height:1.45;margin:1.8em 0 .6em;font-weight:700}
 .prose h1{font-size:22px}
@@ -131,20 +133,20 @@ a{color:inherit}
 .prose ul,.prose ol{padding-left:1.5em;margin:0 0 1em}
 .prose li{margin:.2em 0}
 .prose ul{list-style:square}
-.prose blockquote{margin:0 0 1em;padding:8px 14px;border-left:4px solid var(--ink);background:var(--win)}
+.prose blockquote{margin:0 0 1em;padding:8px 14px;border-left:3px solid var(--winlo);background:var(--win)}
 .prose blockquote p:last-child{margin:0}
 .prose hr{border:0;border-top:3px dotted var(--winlo);margin:2em 0}
-.prose img{max-width:100%;height:auto;border:3px solid var(--ink);display:block}
-.prose code{font-family:var(--mono);font-size:.9em;background:var(--win);border:1px solid var(--winlo);padding:0 4px}
-.prose pre{background:var(--term);color:var(--tg);padding:12px 14px;overflow-x:auto;border:3px solid var(--ink);line-height:1.6;max-width:100%}
+.prose img{max-width:100%;height:auto;border:2px solid var(--line);display:block}
+.prose code{font-family:ui-monospace,Consolas,"D2Coding",monospace;font-size:.9em;background:var(--win);border:1px solid var(--winlo);padding:0 4px}
+.prose pre{background:var(--term);color:var(--tg);padding:12px 14px;overflow-x:auto;border:2px solid var(--line);line-height:1.6;max-width:100%}
 .prose pre code{background:none;border:0;padding:0;color:inherit;font-size:13px}
 .prose table{border-collapse:collapse;margin:0 0 1em;display:block;overflow-x:auto;max-width:100%}
-.prose th,.prose td{border:2px solid var(--ink);padding:4px 10px;text-align:left}
+.prose th,.prose td{border:2px solid var(--line);padding:4px 10px;text-align:left}
 .prose th{background:var(--win)}
 .doc-foot{display:flex;flex-direction:column;gap:12px;padding:14px 24px;background:var(--win);border-top:2px solid var(--winlo)}
 .doc-foot .tagcloud{padding:0}
 .nav{display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:14px}
-.nav a{display:block;padding:6px 10px;border:2px solid var(--ink);background:var(--winhi);text-decoration:none;min-width:0}
+.nav a{display:block;padding:6px 10px;border:2px solid var(--line);background:var(--winhi);text-decoration:none;min-width:0}
 .nav a:hover{background:var(--sel);color:var(--selfg)}
 .nav small{display:block;font-size:12px;opacity:.7}
 .nav .next{text-align:right;grid-column:2}
