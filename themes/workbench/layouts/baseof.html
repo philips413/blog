@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="{{ site.Language.LanguageCode | default "ko" }}">
+<head>
+{{- partial "head.html" . }}
+</head>
+<body>
+{{ partial "menubar.html" . }}
+<div class="desk wrap">
+  {{ partial "icons.html" . }}
+  <main class="main" id="main">
+    {{- block "main" . }}{{ end }}
+  </main>
+  <aside class="side" aria-label="보조 정보">
+    {{- block "side" . }}{{ partial "serieswin.html" . }}{{ partial "tagswin.html" . }}{{ end }}
+  </aside>
+</div>
+<footer class="foot wrap">© {{ with site.Params.footer.since }}{{ . }}–{{ end }}{{ now.Year }} {{ site.Copyright }} · Powered by <a href="https://gohugo.io/">Hugo</a> · 글꼴 <a href="https://github.com/quiple/galmuri">Galmuri</a></footer>
+{{ $js := resources.Get "js/workbench.js" | minify | fingerprint }}
+<script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" data-index="{{ "index.json" | relURL }}" defer></script>
+</body>
+</html>

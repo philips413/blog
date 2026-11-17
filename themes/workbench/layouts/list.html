@@ -1,0 +1,6 @@
+{{ define "main" -}}
+{{ $pager := .Paginate .Pages -}}
+{{ $path := printf "~/blog/%s" .Section -}}
+{{ if eq .Kind "term" }}{{ $path = printf "~/blog/%s/%s" .Data.Plural .Title }}{{ end -}}
+{{ partial "filelist.html" (dict "path" $path "pager" $pager "total" (len .Pages)) }}
+{{- end }}

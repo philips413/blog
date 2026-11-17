@@ -1,0 +1,24 @@
+{{/* 파일 관리자 창. 인자: path(창 제목), pager(페이지네이터), total(전체 글 수) */}}
+<section class="window" aria-labelledby="list-title">
+  <div class="titlebar"><span class="box"></span><h1 class="t" id="list-title">{{ .path }}</h1><span class="box"></span></div>
+  <div class="toolbar"><span>{{ .total }}개 항목 · 최근 작성순</span><span>{{ .pager.PageNumber }} / {{ .pager.TotalPages }} 페이지</span></div>
+  <div class="scroll">
+    <table class="files">
+      <thead><tr><th scope="col">이름</th><th scope="col" class="hide-s">분류</th><th scope="col">작성일</th></tr></thead>
+      <tbody>
+        {{- range .pager.Pages }}
+        <tr>
+          <td><a class="name" href="{{ .RelPermalink }}"><span class="doc" aria-hidden="true"></span>{{ .Title }}</a>
+            <span class="ex">{{ .Summary | plainify | strings.TrimSpace | truncate 70 }}</span></td>
+          <td class="hide-s cat">{{ with .Params.categories }}{{ delimit . ", " }}{{ else }}-{{ end }}</td>
+          <td class="date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time></td>
+        </tr>
+        {{- end }}
+      </tbody>
+    </table>
+  </div>
+  <div class="status">
+    <span>{{ site.Title }}</span>
+    {{ partial "pagination.html" .pager }}
+  </div>
+</section>

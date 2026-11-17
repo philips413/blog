@@ -1,12 +1,16 @@
 baseURL = "https://philips413.github.io"
 title = "PHILIPS'413의 별로 안 진지한 블로그"
-description = "그렇게 무겁게 진지하지도 않고 가볍게 하고 싶은 이야기를 작성해 놓은 블로그입니다."
 author = "Philips413"
 copyright = "Philips413"
-languageCode = "en"
-theme = "tailwind"
+languageCode = "ko"
+theme = "workbench"
+
+[outputs]
+home = ["html", "rss", "json"]
 
 [params]
+brand = "PHILIPS'413"
+description = "그렇게 무겁게 진지하지도 않고 가볍게 하고 싶은 이야기를 작성해 놓은 블로그입니다."
 # dir name of your blog content (default is `content/posts`).
 # the list of set content will show up on your index page (baseurl).
 contentTypeName = "post"
@@ -48,3 +52,7 @@ series = "series"
 [markup.goldmark]
 [markup.goldmark.renderer]
 unsafe = true
+
+# 코드 블록은 테마 CSS의 터미널 색으로 통일한다(문법 색상 미사용)
+[markup.highlight]
+noClasses = false

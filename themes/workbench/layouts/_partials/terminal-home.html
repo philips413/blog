@@ -1,0 +1,12 @@
+{{ $posts := (where site.RegularPages "Section" "post").ByDate.Reverse -}}
+<section class="window" aria-label="터미널">
+  <div class="titlebar"><span class="box"></span><span class="t">터미널</span><span class="box"></span></div>
+  {{ with index $posts 0 -}}
+  <pre class="term"><span class="p">~/blog $</span> ls post/ | wc -l
+{{ len $posts }}
+<span class="p">~/blog $</span> head -3 {{ .File.LogicalName }}
+<a href="{{ .RelPermalink }}">{{ .Title }}</a>
+{{ .Summary | plainify | strings.TrimSpace | truncate 60 }}
+<span class="p">~/blog $</span> <span class="c"></span></pre>
+  {{- end }}
+</section>

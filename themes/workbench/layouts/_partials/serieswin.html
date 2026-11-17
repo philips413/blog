@@ -1,0 +1,11 @@
+{{ $cur := .RelPermalink -}}
+{{ with site.Taxonomies.series -}}
+<section class="window" aria-label="시리즈">
+  <div class="titlebar"><span class="box"></span><span class="t">series/</span><span class="box"></span></div>
+  <ul class="list">
+    {{- range .ByCount }}
+    <li><a href="{{ .Page.RelPermalink }}"{{ if eq $cur .Page.RelPermalink }} class="cur"{{ end }}><span>▸ {{ .Page.Title }}</span><small>×{{ .Count }}</small></a></li>
+    {{- end }}
+  </ul>
+</section>
+{{- end }}
