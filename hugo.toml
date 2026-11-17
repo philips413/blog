@@ -1,5 +1,5 @@
 baseURL = "https://philips413.github.io"
-title = "PHILIPS'413의 별로 안 진지한 블로그"
+title = "슬기로운 .dev생활"
 author = "Philips413"
 copyright = "Philips413"
 languageCode = "ko"
@@ -9,7 +9,7 @@ theme = "workbench"
 home = ["html", "rss", "json"]
 
 [params]
-brand = "PHILIPS'413"
+brand = "슬기로운 .dev생활"
 description = "그렇게 무겁게 진지하지도 않고 가볍게 하고 싶은 이야기를 작성해 놓은 블로그입니다."
 # dir name of your blog content (default is `content/posts`).
 # the list of set content will show up on your index page (baseurl).
