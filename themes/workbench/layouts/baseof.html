@@ -11,6 +11,7 @@
     {{- block "main" . }}{{ end }}
   </main>
   <aside class="side" aria-label="보조 정보">
+    <div class="buddy-lane" aria-hidden="true"><span class="buddy"></span></div>
     {{- block "side" . }}{{ partial "serieswin.html" . }}{{ partial "tagswin.html" . }}{{ end }}
   </aside>
 </div>

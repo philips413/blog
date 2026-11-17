@@ -16,6 +16,81 @@
   var nf = document.getElementById("nf-path");
   if (nf) nf.textContent = decodeURIComponent(location.pathname);
 
+  // 도트 애니메이션은 "애니메이션 줄이기" 설정이면 모두 끈다
+  var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function rand(a, b) { return a + Math.random() * (b - a); }
+
+  // 오른쪽 창 위를 천천히 걷다가 쉬는 캐릭터. 탭이 안 보이거나 영역이 숨겨지면 멈춘다
+  var lane = document.querySelector(".buddy-lane");
+  var buddy = lane && lane.querySelector(".buddy");
+  if (buddy) {
+    var SIZE = 48, SPEED = 18; // px/s
+    var x = 0, dir = 1, walking = false, until = 0, last = 0, raf = 0;
+    var place = function () { buddy.style.transform = "translateX(" + x + "px) scaleX(" + dir + ")"; };
+    var setWalk = function (on, now) {
+      walking = on;
+      buddy.classList.toggle("walking", on);
+      until = now + (on ? rand(7000, 14000) : rand(2500, 6000));
+    };
+    var step = function (now) {
+      var max = lane.clientWidth - SIZE;
+      if (!lane.offsetParent || max <= 0) { raf = 0; buddy.classList.remove("walking"); return; }
+      var dt = last ? Math.min(now - last, 100) / 1000 : 0;
+      last = now;
+      if (walking) {
+        x += dir * SPEED * dt;
+        if (x <= 0) { x = 0; dir = 1; }
+        if (x >= max) { x = max; dir = -1; }
+        if (now > until) setWalk(false, now);
+      } else if (now > until) {
+        if (Math.random() < 0.4) dir = -dir;
+        setWalk(true, now);
+      }
+      place();
+      raf = requestAnimationFrame(step);
+    };
+    var start = function () {
+      if (calm || raf || document.hidden || !lane.offsetParent) return;
+      last = 0;
+      raf = requestAnimationFrame(function (t) { if (!until) setWalk(true, t); step(t); });
+    };
+    var stop = function () { if (raf) cancelAnimationFrame(raf); raf = 0; buddy.classList.remove("walking"); };
+    x = Math.round(rand(0, Math.max(0, lane.clientWidth - SIZE)));
+    place();
+    start();
+    document.addEventListener("visibilitychange", function () { document.hidden ? stop() : start(); });
+    window.addEventListener("resize", function () { stop(); start(); });
+  }
+
+  // 홈 터미널: 명령어를 한 번만 타이핑하고 결과를 차례로 보여준다(JS가 없으면 처음부터 전부 보임)
+  var term = document.querySelector(".term[data-typing]");
+  if (term && !calm) {
+    var cmds = Array.prototype.slice.call(term.querySelectorAll(".cmd"));
+    var outs = Array.prototype.slice.call(term.querySelectorAll(".out"));
+    var cursor = term.querySelector(".c");
+    var texts = cmds.map(function (c) { return c.textContent; });
+    cmds.forEach(function (c) { c.textContent = ""; });
+    outs.forEach(function (o) { o.style.visibility = "hidden"; });
+    var i = 0;
+    var typeNext = function () {
+      if (i >= cmds.length) { if (cursor) term.appendChild(cursor); return; }
+      var c = cmds[i], t = texts[i], n = 0;
+      if (cursor) c.after(cursor);
+      var timer = setInterval(function () {
+        c.textContent = t.slice(0, ++n);
+        if (n >= t.length) {
+          clearInterval(timer);
+          setTimeout(function () {
+            if (outs[i]) outs[i].style.visibility = "";
+            i++;
+            setTimeout(typeNext, 350);
+          }, 250);
+        }
+      }, 55);
+    };
+    setTimeout(typeNext, 400);
+  }
+
   // 검색
   var input = document.getElementById("q");
   var box = document.getElementById("results");

@@ -27,7 +27,7 @@ a{color:inherit}
 :focus-visible{outline:3px dashed var(--accent);outline-offset:2px}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .wrap{padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* ---------- 메뉴바 ---------- */
 .menubar{position:sticky;top:0;z-index:20;background:var(--winhi);border-bottom:2px solid var(--line);
@@ -60,6 +60,20 @@ a{color:inherit}
 .folder::before{content:"";position:absolute;left:-2px;top:-9px;width:20px;height:9px;background:var(--folder);border:2px solid var(--line);border-bottom:0}
 .folder .n{position:absolute;right:3px;bottom:0;font-size:11px;color:var(--ink);text-shadow:none;font-family:var(--mono)}
 .ico.cur .folder,.ico.cur .folder::before{background:var(--accent)}
+
+/* ---------- 도트 애니메이션 ---------- */
+/* 마우스를 올렸을 때만 한 번: 폴더 탭이 들리며 살짝 뛰어오름, 파일 아이콘도 한 번 뜀 */
+@keyframes hop{50%{transform:translateY(-3px)}}
+.ico:hover .folder,.ico:focus-visible .folder{animation:hop .32s steps(1) 1}
+.ico:hover .folder::before,.ico:focus-visible .folder::before{top:-11px;height:11px}
+.files tbody tr:hover .doc{animation:hop .32s steps(1) 1}
+
+/* 오른쪽 창 위를 걸어 다니는 캐릭터(위치는 JS가 옮김). 2프레임 걷기 */
+.buddy-lane{position:relative;height:48px;margin-bottom:-26px;pointer-events:none}
+.buddy{position:absolute;left:0;bottom:0;width:48px;height:48px;
+  background:url("/img/buddy.svg") 0 0/96px 48px no-repeat;image-rendering:pixelated}
+.buddy.walking{animation:buddy-step .6s steps(2) infinite}
+@keyframes buddy-step{to{background-position:-96px 0}}
 
 /* ---------- 창 ---------- */
 .window{background:var(--win);border:2px solid var(--line);box-shadow:var(--shadow);min-width:0}
@@ -159,6 +173,7 @@ a{color:inherit}
   .desk{grid-template-columns:minmax(0,1fr)}
   .icons{flex-direction:row;flex-wrap:wrap;justify-content:flex-start;gap:14px 18px}
   .side{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .buddy-lane{display:none}
 }
 @media (max-width:600px){
   .files .hide-s{display:none}

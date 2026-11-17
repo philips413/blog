@@ -2,11 +2,11 @@
 <section class="window" aria-label="터미널">
   <div class="titlebar"><span class="box"></span><span class="t">터미널</span><span class="box"></span></div>
   {{ with index $posts 0 -}}
-  <pre class="term"><span class="p">~/blog $</span> ls post/ | wc -l
-{{ len $posts }}
-<span class="p">~/blog $</span> head -3 {{ .File.LogicalName }}
-<a href="{{ .RelPermalink }}">{{ .Title }}</a>
-{{ .Summary | plainify | strings.TrimSpace | truncate 60 }}
+  <pre class="term" data-typing><span class="p">~/blog $</span> <span class="cmd">ls post/ | wc -l</span>
+<span class="out">{{ len $posts }}</span>
+<span class="p">~/blog $</span> <span class="cmd">head -3 {{ .File.LogicalName }}</span>
+<span class="out"><a href="{{ .RelPermalink }}">{{ .Title }}</a>
+{{ .Summary | plainify | strings.TrimSpace | truncate 60 }}</span>
 <span class="p">~/blog $</span> <span class="c"></span></pre>
   {{- end }}
 </section>
