@@ -1,0 +1,22 @@
+{{- /*
+  마크다운 이미지 ![설명](경로) 출력.
+  경로 찾는 순서: assets/ 아래(예: images/2026/a.jpg, /images/a.jpg) → 글 번들 안 파일 → 적힌 주소 그대로.
+  찾은 이미지는 사이트에 함께 올리고 가로·세로 크기와 지연 로딩을 붙인다.
+  로컬 경로인데 파일이 없으면 빌드 경고를 낸다.
+*/ -}}
+{{- $u := urls.Parse .Destination -}}
+{{- $src := .Destination -}}
+{{- $img := "" -}}
+{{- if and (not $u.IsAbs) $u.Path (not (hasPrefix .Destination "data:")) -}}
+  {{- $path := strings.TrimPrefix "/" $u.Path -}}
+  {{- with or (resources.Get $path) (.PageInner.Resources.Get $path) -}}
+    {{- $img = . -}}
+    {{- $src = .RelPermalink -}}
+  {{- else -}}
+    {{- warnf "이미지를 찾을 수 없음: %q (%s) — assets/%s 에 파일이 있는지 확인하세요." .Destination .Page.File.Path $path -}}
+  {{- end -}}
+{{- end -}}
+<img src="{{ $src }}" alt="{{ .PlainText }}"
+  {{- with .Title }} title="{{ . }}"{{ end }}
+  {{- with $img }}{{ if and (eq .MediaType.MainType "image") (ne .MediaType.SubType "svg") }} width="{{ .Width }}" height="{{ .Height }}"{{ end }}{{ end }} loading="lazy" decoding="async">
+{{- /* 끝 줄바꿈 없음 */ -}}
