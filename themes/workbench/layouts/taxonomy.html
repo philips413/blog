@@ -1,14 +1,12 @@
 {{ define "main" -}}
-<section class="window" aria-labelledby="list-title">
-  <div class="titlebar"><span class="box"></span><h1 class="t" id="list-title">~/blog/{{ .Data.Plural }}</h1><span class="box"></span></div>
-  <div class="toolbar"><span>{{ len .Data.Terms }}개 폴더 · 글 많은 순</span></div>
-  <div class="folders">
-    {{- range .Data.Terms.ByCount }}
-    <a class="ico" href="{{ .Page.RelPermalink }}">
-      <span class="folder" aria-hidden="true"><span class="n">{{ .Count }}</span></span>
-      <span class="lbl">{{ .Page.Title }}<span class="sr"> ({{ .Count }}개)</span></span>
-    </a>
-    {{- end }}
-  </div>
-</section>
+{{ $names := dict "categories" "분류" "tags" "태그" "series" "시리즈" -}}
+<header class="list-head">
+  <h1>{{ index $names .Data.Plural | default .Title }}</h1>
+  <p>{{ len .Data.Terms }}개</p>
+</header>
+<ul class="terms">
+  {{- range .Data.Terms.ByCount }}
+  <li><a href="{{ .Page.RelPermalink }}">{{ if eq $.Data.Plural "tags" }}#{{ end }}{{ .Page.Title }} <small>{{ .Count }}</small></a></li>
+  {{- end }}
+</ul>
 {{- end }}

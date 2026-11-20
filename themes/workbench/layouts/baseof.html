@@ -4,19 +4,17 @@
 {{- partial "head.html" . }}
 </head>
 <body>
-<div class="sky" aria-hidden="true"><div class="clouds far"></div><div class="clouds near"></div></div>
-{{ partial "menubar.html" . }}
-<div class="desk wrap">
-  {{ partial "icons.html" . }}
-  <main class="main" id="main">
-    {{- block "main" . }}{{ end }}
-  </main>
-  <aside class="side" aria-label="보조 정보">
-    <div class="buddy-lane" aria-hidden="true"><span class="buddy"></span></div>
-    {{- block "side" . }}{{ partial "serieswin.html" . }}{{ partial "tagswin.html" . }}{{ end }}
-  </aside>
-</div>
-<footer class="foot wrap">© {{ with site.Params.footer.since }}{{ . }}–{{ end }}{{ now.Year }} {{ site.Copyright }} · Powered by <a href="https://gohugo.io/">Hugo</a> · 글꼴 <a href="https://github.com/quiple/galmuri">Galmuri</a></footer>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+{{ partial "header.html" . }}
+<main id="main" class="{{ block "mainclass" . }}wrap{{ end }}">
+  {{- block "main" . }}{{ end }}
+</main>
+<footer class="foot">
+  <div class="wrap">
+    <span>© {{ with site.Params.footer.since }}{{ . }}–{{ end }}{{ now.Year }} {{ site.Copyright }}</span>
+    <span>Hugo로 만들고 GitHub Pages로 배포 · <a href="{{ "index.xml" | relURL }}">RSS</a></span>
+  </div>
+</footer>
 {{ $js := resources.Get "js/workbench.js" | minify | fingerprint }}
 <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" data-index="{{ "index.json" | relURL }}" defer></script>
 </body>

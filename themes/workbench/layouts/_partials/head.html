@@ -8,6 +8,9 @@
 <link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="32x32">
 <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
 <link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}">
-<link rel="preload" href="{{ "fonts/Galmuri11.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+{{- /* 저장된 다크/라이트 선택을 그리기 전에 적용해 화면 깜빡임을 막는다 */}}
+<script>try{var t=localStorage.getItem("theme");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 {{ $css := resources.Get "css/workbench.css" | minify | fingerprint }}
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">

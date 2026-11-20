@@ -1,46 +1,34 @@
+{{ define "mainclass" }}wrap narrow{{ end }}
+
 {{ define "main" -}}
-<article class="window" aria-labelledby="doc-title">
-  <div class="titlebar"><span class="box"></span><span class="t">~/blog/{{ with .File }}{{ replace .Path "\\" "/" }}{{ end }}</span><span class="box"></span></div>
-  <header class="doc-head">
-    <h1 id="doc-title">{{ .Title }}</h1>
-    {{- if eq .Section "post" }}
-    <div class="meta">
-      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>
-      <span>약 {{ .ReadingTime }}분</span>
-      {{- range .GetTerms "categories" }}<a href="{{ .RelPermalink }}">▣ {{ .Title }}</a>{{ end }}
-      {{- range .GetTerms "series" }}<a href="{{ .RelPermalink }}">▸ 시리즈: {{ .Title }}</a>{{ end }}
-    </div>
-    {{- end }}
-  </header>
+{{ $isPost := eq .Section "post" -}}
+<article class="article">
+  {{ if $isPost }}<a class="back" href="{{ "post/" | relURL }}">← 모든 글</a>{{ end }}
+  <h1>{{ .Title }}</h1>
+  {{- if $isPost }}
+  <p class="a-meta">
+    <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>
+    <span>약 {{ .ReadingTime }}분</span>
+    {{- range .GetTerms "categories" }}<a class="cat" href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}
+    {{- range .GetTerms "series" }}<a href="{{ .RelPermalink }}">시리즈 · {{ .Title }}</a>{{ end }}
+  </p>
+  {{- end }}
+  {{- /* 큰 소제목이 2개 이상이면 목차를 보여준다 */}}
+  {{ if ge (len (findRE `<h2[\s>]` .Content)) 2 }}
+  <nav class="toc" aria-label="목차"><b>목차</b>{{ .TableOfContents }}</nav>
+  {{ end }}
   <div class="prose">
     {{ .Content }}
   </div>
-  {{- if eq .Section "post" }}
-  <footer class="doc-foot">
-    {{ with .GetTerms "tags" }}<div class="tagcloud" aria-label="태그">{{ range . }}<a href="{{ .RelPermalink }}">#{{ .Title }}</a>{{ end }}</div>{{ end }}
-    {{ $older := .PrevInSection }}{{ $newer := .NextInSection }}
-    {{ if or $older $newer }}
-    <nav class="nav" aria-label="이전·다음 글">
-      {{ with $older }}<a class="prev" href="{{ .RelPermalink }}"><small>◀ 이전 글</small>{{ .Title }}</a>{{ end }}
-      {{ with $newer }}<a class="next" href="{{ .RelPermalink }}"><small>다음 글 ▶</small>{{ .Title }}</a>{{ end }}
-    </nav>
-    {{ end }}
-  </footer>
+  {{- if $isPost }}
+  {{ with .GetTerms "tags" }}<div class="a-tags">{{ range . }}<a href="{{ .RelPermalink }}">#{{ .Title }}</a>{{ end }}</div>{{ end }}
+  {{ $older := .PrevInSection }}{{ $newer := .NextInSection }}
+  {{ if or $older $newer }}
+  <nav class="a-nav" aria-label="이전·다음 글">
+    {{ with $older }}<a class="prev" href="{{ .RelPermalink }}"><small>← 이전 글</small>{{ .Title }}</a>{{ end }}
+    {{ with $newer }}<a class="next" href="{{ .RelPermalink }}"><small>다음 글 →</small>{{ .Title }}</a>{{ end }}
+  </nav>
+  {{ end }}
   {{- end }}
 </article>
-{{- end }}
-
-{{ define "side" -}}
-{{ if eq .Section "post" -}}
-<section class="window" aria-label="파일 정보">
-  <div class="titlebar"><span class="box"></span><span class="t">터미널</span><span class="box"></span></div>
-  <pre class="term"><span class="p">~/blog $</span> stat {{ .File.LogicalName }}
-작성일  {{ .Date.Format "2006.01.02" }}
-분량    약 {{ .ReadingTime }}분 · {{ lang.FormatNumber 0 (len (.Plain | strings.TrimSpace)) }}자
-{{ with .Params.categories }}분류    {{ delimit . ", " }}
-{{ end }}<span class="p">~/blog $</span> <span class="c"></span></pre>
-</section>
-{{- end }}
-{{ partial "serieswin.html" . }}
-{{ partial "tagswin.html" . }}
 {{- end }}

@@ -1,10 +1,10 @@
 {{ if gt .TotalPages 1 -}}
 <nav class="pager" aria-label="페이지 이동">
-  {{ with .Prev }}<a href="{{ .URL }}">◀ 이전</a>{{ else }}<span class="off">◀ 이전</span>{{ end }}
+  {{ with .Prev }}<a href="{{ .URL }}">← 이전</a>{{ end }}
   {{- $n := .PageNumber }}
   {{- range .Pagers }}
   {{ if eq .PageNumber $n }}<span class="cur" aria-current="page">{{ .PageNumber }}</span>{{ else }}<a href="{{ .URL }}">{{ .PageNumber }}</a>{{ end }}
   {{- end }}
-  {{ with .Next }}<a href="{{ .URL }}">다음 ▶</a>{{ else }}<span class="off">다음 ▶</span>{{ end }}
+  {{ with .Next }}<a href="{{ .URL }}">다음 →</a>{{ end }}
 </nav>
 {{- end }}

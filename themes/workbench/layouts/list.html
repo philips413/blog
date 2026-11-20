@@ -1,6 +1,19 @@
 {{ define "main" -}}
+{{ $title := .Title -}}
+{{ $label := "" -}}
+{{ if eq .Kind "section" }}{{ $title = "모든 글" }}{{ end -}}
+{{ if eq .Kind "term" -}}
+  {{ if eq .Data.Plural "tags" }}{{ $title = printf "#%s" .Title }}{{ $label = "태그" }}{{ end -}}
+  {{ if eq .Data.Plural "series" }}{{ $label = "시리즈" }}{{ end -}}
+  {{ if eq .Data.Plural "categories" }}{{ $label = "분류" }}{{ end -}}
+{{ end -}}
+<header class="list-head">
+  {{ with $label }}<p class="eyebrow">{{ . }}</p>{{ end }}
+  <h1>{{ $title }}</h1>
+  <p>{{ len .Pages }}편의 글</p>
+</header>
+{{ if or (eq .Kind "section") (and (eq .Kind "term") (eq .Data.Plural "categories")) }}{{ partial "tabs.html" . }}{{ end }}
 {{ $pager := .Paginate .Pages -}}
-{{ $path := printf "~/blog/%s" .Section -}}
-{{ if eq .Kind "term" }}{{ $path = printf "~/blog/%s/%s" .Data.Plural .Title }}{{ end -}}
-{{ partial "filelist.html" (dict "path" $path "pager" $pager "total" (len .Pages)) }}
+{{ partial "cards.html" $pager.Pages }}
+{{ partial "pagination.html" $pager }}
 {{- end }}

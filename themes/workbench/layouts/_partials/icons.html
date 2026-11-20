@@ -1,9 +1,0 @@
-{{ $cur := .RelPermalink -}}
-<nav class="icons" aria-label="카테고리">
-  {{- range site.Taxonomies.categories.ByCount }}
-  <a class="ico{{ if eq $cur .Page.RelPermalink }} cur{{ end }}" href="{{ .Page.RelPermalink }}">
-    <span class="folder" aria-hidden="true"><span class="n">{{ .Count }}</span></span>
-    <span class="lbl">{{ .Page.Title }}<span class="sr"> ({{ .Count }}개)</span></span>
-  </a>
-  {{- end }}
-</nav>

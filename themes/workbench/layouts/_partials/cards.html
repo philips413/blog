@@ -1,0 +1,20 @@
+{{- /* 글 카드 격자. 인자: 글 목록 */ -}}
+<ul class="grid">
+  {{- range . }}
+  {{- $img := partial "cover.html" . | strings.TrimSpace }}
+  <li class="card{{ with $img }} has-img{{ end }}">
+    {{- with $img }}{{ . | safeHTML }}{{ end }}
+    <div class="card-body">
+      <p class="meta">
+        {{- with .GetTerms "categories" }}{{ with index . 0 }}<a class="cat" href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}{{ else }}<span></span>{{ end -}}
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006.01.02" }}</time>
+      </p>
+      <h2 class="card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <p class="card-ex">{{ .Summary | plainify | strings.TrimSpace | truncate 140 }}</p>
+      {{- with .GetTerms "tags" }}
+      <p class="card-tags">{{ range first 3 . }}<a href="{{ .RelPermalink }}">#{{ .Title }}</a>{{ end }}</p>
+      {{- end }}
+    </div>
+  </li>
+  {{- end }}
+</ul>

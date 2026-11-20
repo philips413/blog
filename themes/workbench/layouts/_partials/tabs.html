@@ -1,0 +1,10 @@
+{{- /* 분류 탭. 인자: 현재 페이지. 홈·모든 글이면 '전체', 카테고리 페이지면 그 분류가 선택된다 */ -}}
+{{ $cur := .RelPermalink -}}
+{{ $all := or .IsHome (eq .Kind "section") -}}
+<nav class="tabs" aria-label="분류">
+  <a class="tab{{ if $all }} on{{ end }}" href="{{ "post/" | relURL }}"{{ if $all }} aria-current="page"{{ end }}>전체 <small>{{ len (where site.RegularPages "Section" "post") }}</small></a>
+  {{- range site.Taxonomies.categories.ByCount }}
+  {{- $on := eq $cur .Page.RelPermalink }}
+  <a class="tab{{ if $on }} on{{ end }}" href="{{ .Page.RelPermalink }}"{{ if $on }} aria-current="page"{{ end }}>{{ .Page.Title }} <small>{{ .Count }}</small></a>
+  {{- end }}
+</nav>

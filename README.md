@@ -1,6 +1,6 @@
 # 슬기로운 .dev생활
 
-Hugo로 만든 개인 블로그입니다. 16bit 데스크톱 스타일의 자체 테마(`workbench`)를 쓰고, GitHub Pages로 배포합니다.
+Hugo로 만든 개인 블로그입니다. 단정한 개발 블로그 스타일의 자체 테마(`workbench`)를 쓰고, GitHub Pages로 배포합니다.
 
 - 사이트: https://philips413.github.io
 - 원본 저장소: `philips413/blog` (이 저장소)
@@ -13,7 +13,7 @@ Hugo로 만든 개인 블로그입니다. 16bit 데스크톱 스타일의 자체
 | `content/post/<분류>/` | 글(마크다운). 예: `content/post/essay/essay_2024040701.md` |
 | `content/about.md` | 소개 페이지 |
 | `assets/images/` | 글에 넣는 이미지 |
-| `themes/workbench/` | 블로그 테마(레이아웃·CSS·JS·글꼴·아이콘) |
+| `themes/workbench/` | 블로그 테마(레이아웃·CSS·JS·아이콘) |
 | `hugo.toml` | 사이트 설정(제목, 메뉴, 숨김 규칙 등) |
 | `public/` | 빌드 결과. 배포 저장소(서브모듈)라 직접 고치지 않음 |
 | `scripts/` | 점검·이미지 생성 스크립트 |
@@ -81,19 +81,19 @@ series: []
 - 경로를 잘못 적으면 빌드 때 `WARN 이미지를 찾을 수 없음` 경고가 뜨고, 배포 점검에서도 멈춥니다.
 - 마크다운 `![]()` 문법에만 적용됩니다. HTML `<img>` 태그는 그대로 출력됩니다.
 
-### 대표 이미지(목록 미리보기)
+### 대표 이미지(글 카드 사진)
 
-글 목록(홈, 모든 글보기, 카테고리·태그·시리즈)에서 이미지가 있는 글은 제목 앞에 작은 미리보기가 나옵니다.
+글 목록(홈, 모든 글, 카테고리·태그·시리즈)의 카드에서 이미지가 있는 글은 카드 위에 사진이 붙습니다.
 
 1. 머리말에 `image:`를 적으면 그 이미지를 씁니다.
 2. 없으면 본문의 첫 번째 이미지(마크다운·HTML 모두)를 자동으로 씁니다.
-3. 이미지가 없는 글은 문서 아이콘이 나옵니다.
+3. 이미지가 없는 글은 사진 없이 글자만 나옵니다.
 
 ```yaml
 image: images/2026/retro-01.jpg   # assets/images 기준. 외부 주소(https://...)도 가능
 ```
 
-`assets/` 안의 이미지는 빌드할 때 미리보기 크기로 잘라 작은 파일을 따로 만들고, 외부 주소는 원본을 줄여 보여줍니다. `image:` 경로를 잘못 적으면 빌드 때 `WARN 대표 이미지를 찾을 수 없음` 경고가 뜹니다.
+`assets/` 안의 이미지는 빌드할 때 카드 크기(16:9, 640×360)로 잘라 작은 파일을 따로 만들고, 외부 주소는 원본을 그대로 씁니다. 외부 이미지를 불러오지 못하면 사진 영역을 숨깁니다. `image:` 경로를 잘못 적으면 빌드 때 `WARN 대표 이미지를 찾을 수 없음` 경고가 뜹니다.
 
 ### 글 숨기기
 
@@ -148,13 +148,14 @@ path = "/post/church/**"
 | 스크립트 | 용도 |
 |---|---|
 | `scripts/check_site.py <빌드 폴더> [content] [--ignore 폴더,...]` | 빌드 결과 점검. 배포 스크립트가 자동으로 실행 |
-| `scripts/make_wallpaper.py` | 바탕화면 도트 풍경(`wallpaper.png`)과 구름 두 장(`clouds-far.png`, `clouds-near.png`) 생성 |
 | `scripts/make_icons.py` | 파비콘(`favicon.ico`, `favicon.svg`)과 휴대폰 홈 화면 아이콘(`apple-touch-icon.png`) 생성 |
 
-그림 스크립트는 결과를 `themes/workbench/static/` 아래에 저장합니다. 색이나 모양을 바꾸려면 스크립트 안의 팔레트·도트 배열을 고친 뒤 다시 실행하세요. 표준 라이브러리만 쓰고, 매번 같은 결과가 나옵니다.
+아이콘 스크립트는 결과를 `themes/workbench/static/` 아래에 저장합니다. 모양을 바꾸려면 스크립트 안의 도트 배열을 고친 뒤 다시 실행하세요. 표준 라이브러리만 쓰고, 매번 같은 결과가 나옵니다.
 
 ## 테마(workbench) 참고
 
-- 글꼴: 메뉴·제목·터미널에는 픽셀 글꼴 [갈무리(Galmuri)](https://github.com/quiple/galmuri)(SIL OFL 1.1, `themes/workbench/static/fonts/OFL.md`)를 씁니다. 본문에는 시스템 한글 글꼴을 씁니다.
-- 애니메이션(걷는 캐릭터, 터미널 타이핑, 구름)은 운영체제의 "애니메이션 줄이기" 설정을 켜면 멈춥니다.
-- 블로그 이름·메뉴는 `hugo.toml`의 `title`, `params.brand`, `[[menu.main]]`에서 바꿉니다.
+- 화면: 홈은 프로필 카드 → 분류 탭 → 글 카드 격자(한 페이지 9편) 순서입니다. 글 상세는 소제목(`##`)이 2개 이상이면 목차가 자동으로 붙습니다.
+- 다크 모드: 운영체제 설정을 따르고, 헤더의 달·해 버튼으로 바꿀 수 있습니다. 바꾼 선택은 그 브라우저에 기억됩니다.
+- 검색: 헤더 검색창 또는 `/` 키. 제목·분류·태그·본문에서 찾습니다.
+- 글꼴: 본문은 [Pretendard](https://github.com/orioncactus/pretendard)(SIL OFL 1.1)를 jsDelivr CDN에서 필요한 글자만 받아 씁니다. 코드는 고정폭 시스템 글꼴입니다.
+- 설정 위치(`hugo.toml`): 블로그 이름 `title`(이름 속 `.dev`는 자동으로 초록 강조), 메뉴 `[[menu.main]]`, 프로필 카드 `[params.profile]`(이름·소개·아바타 글자·GitHub 주소), 한 페이지 글 수 `[pagination] pagerSize`.

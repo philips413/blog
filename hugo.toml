@@ -8,8 +8,11 @@ theme = "workbench"
 [outputs]
 home = ["html", "rss", "json"]
 
+# 카드 격자(3열)에 맞춰 한 페이지 9편
+[pagination]
+pagerSize = 9
+
 [params]
-brand = "슬기로운 .dev생활"
 description = "그렇게 무겁게 진지하지도 않고 가볍게 하고 싶은 이야기를 작성해 놓은 블로그입니다."
 # dir name of your blog content (default is `content/posts`).
 # the list of set content will show up on your index page (baseurl).
@@ -22,25 +25,32 @@ logo = "logo.svg"
 since = 2024
 poweredby = true
 
+# 홈 맨 위 프로필 카드
+[params.profile]
+name = "Philips413"
+bio = "개발하며 배우고 사는 이야기를, 너무 무겁지 않게 기록합니다."
+avatar = ".dev"
+github = "https://github.com/philips413"
+
 [menu]
 
 [[menu.main]]
 identifier = "post"
-name = "모든 글보기"
+name = "글"
 pageRef = "/post"
-weight = 0
-
-[[menu.main]]
-identifier = "about"
-name = "소개"
-pageRef = "/about"
-weight = 10
+weight = 1
 
 [[menu.main]]
 identifier = "archieve"
 name = "독서"
 pageRef = "/categories/독서/"
-weight = 20
+weight = 2
+
+[[menu.main]]
+identifier = "about"
+name = "소개"
+pageRef = "/about"
+weight = 3
 
 # 기독교(교회 회의록) 글은 사이트에서 제외한다. 원본 파일은 보관
 [[cascade]]
@@ -61,6 +71,6 @@ series = "series"
 [markup.goldmark.renderer]
 unsafe = true
 
-# 코드 블록은 테마 CSS의 터미널 색으로 통일한다(문법 색상 미사용)
+# 코드 블록은 테마 CSS의 어두운 상자 색으로 통일한다(문법 색상 미사용)
 [markup.highlight]
 noClasses = false

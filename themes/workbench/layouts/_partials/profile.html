@@ -1,0 +1,18 @@
+{{- $posts := where site.RegularPages "Section" "post" -}}
+{{ with site.Params.profile -}}
+<section class="profile" aria-label="블로그 소개">
+  <div class="avatar" aria-hidden="true">{{ .avatar }}</div>
+  <div class="who">
+    <h1>{{ .name }}</h1>
+    <p>{{ .bio }}</p>
+    <p class="links">
+      {{- with .github }}<a href="{{ . }}">GitHub</a>{{ end -}}
+      <a href="{{ "index.xml" | relURL }}">RSS</a>
+      <a href="{{ "about/" | relURL }}">소개 더 보기</a>
+    </p>
+  </div>
+  {{ with $posts -}}
+  <p class="stat"><b>{{ len . }}</b>편의 글 · {{ (index .ByDate 0).Date.Year }}년부터</p>
+  {{- end }}
+</section>
+{{- end }}

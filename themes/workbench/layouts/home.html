@@ -1,11 +1,7 @@
 {{ define "main" -}}
-{{ $posts := where site.RegularPages "Section" "post" -}}
-{{ $pager := .Paginate $posts -}}
-{{ partial "filelist.html" (dict "path" "~/blog/post" "pager" $pager "total" (len $posts)) }}
-{{- end }}
-
-{{ define "side" -}}
-{{ partial "terminal-home.html" . }}
-{{ partial "serieswin.html" . }}
-{{ partial "tagswin.html" . }}
+{{ partial "profile.html" . }}
+{{ partial "tabs.html" . }}
+{{ $pager := .Paginate (where site.RegularPages "Section" "post") -}}
+{{ partial "cards.html" $pager.Pages }}
+{{ partial "pagination.html" $pager }}
 {{- end }}
